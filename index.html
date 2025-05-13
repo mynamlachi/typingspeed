@@ -10,11 +10,11 @@
             background-color: rgb(66, 63, 63);
             color: white;
         }
-        sentence {
+        #sentence {
             font-size: 18px;
             margin-bottom: 20px;
         }
-        textarea {
+        #textInput {
             width: 60%;
             height: 100px;
             font-size: 16px;
@@ -31,7 +31,7 @@
             cursor: pointer;
             border-radius: 8px;
         }
-        result {
+        #result {
             margin-top: 15px;
             font-size: 20px;
             font-weight: bold;
@@ -57,29 +57,34 @@
 
         let startTime;
         let selectedQuote = "";
+        const textInput = document.getElementById("textInput");
 
         function startTest() {
             selectedQuote = quotes[Math.floor(Math.random() * quotes.length)];
             document.getElementById("sentence").innerText = selectedQuote;
-            document.getElementById("textInput").disabled = false;
-            document.getElementById("textInput").value = "";
+            textInput.disabled = false;
+            textInput.value = "";
             document.getElementById("result").innerText = "";
-            document.getElementById("textInput").focus();
+            textInput.focus();
             startTime = new Date().getTime();
 
-            document.getElementById("textInput").addEventListener("input", checkTyping);
+            // Remove any existing listener to avoid duplicates
+            textInput.removeEventListener("input", checkTyping);
+            textInput.addEventListener("input", checkTyping);
         }
 
         function checkTyping() {
-            let typedText = document.getElementById("textInput").value;
+            let typedText = textInput.value;
             if (typedText === selectedQuote) {
                 let endTime = new Date().getTime();
-                let timeTaken = (endTime - startTime) / 1000; 
+                let timeTaken = (endTime - startTime) / 1000;
                 let words = selectedQuote.split(" ").length;
                 let wpm = Math.round((words / timeTaken) * 60);
 
-                document.getElementById("result").innerText = You typed at ${wpm} WPM!;
-                document.getElementById("textInput").disabled = true;
+                document.getElementById("result").innerText = `You typed at ${wpm} WPM!`;
+                textInput.disabled = true;
+                // Optionally, remove the listener after completion
+                textInput.removeEventListener("input", checkTyping);
             }
         }
     </script>
