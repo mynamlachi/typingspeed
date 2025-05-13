@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Typing Speed Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: rgb(66, 63, 63);
+            color: white;
+        }
+        sentence {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 60%;
+            height: 100px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 3px solid black;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: Green;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        result {
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Typing Speed Test</h1>
+    <p id="sentence">Click "Start" to get a random sentence and begin typing</p>
+    <textarea id="textInput" placeholder="Start typing here..." disabled></textarea>
+    <br>
+    <button onclick="startTest()">Start</button>
+    <p id="result"></p>
+
+    <script>
+        const quotes = [
+            "The quick brown fox jumps over the lazy dog.",
+            "Typing fast is a useful skill in today's world.",
+            "JavaScript is a versatile programming language.",
+            "Coding is both an art and a science.",
+            "Practice makes perfect in the world of typing."
+        ];
+
+        let startTime;
+        let selectedQuote = "";
+
+        function startTest() {
+            selectedQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById("sentence").innerText = selectedQuote;
+            document.getElementById("textInput").disabled = false;
+            document.getElementById("textInput").value = "";
+            document.getElementById("result").innerText = "";
+            document.getElementById("textInput").focus();
+            startTime = new Date().getTime();
+
+            document.getElementById("textInput").addEventListener("input", checkTyping);
+        }
+
+        function checkTyping() {
+            let typedText = document.getElementById("textInput").value;
+            if (typedText === selectedQuote) {
+                let endTime = new Date().getTime();
+                let timeTaken = (endTime - startTime) / 1000; 
+                let words = selectedQuote.split(" ").length;
+                let wpm = Math.round((words / timeTaken) * 60);
+
+                document.getElementById("result").innerText = You typed at ${wpm} WPM!;
+                document.getElementById("textInput").disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>
